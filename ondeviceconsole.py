@@ -64,7 +64,7 @@ def startSyslog(process_filter="all",highlights=None):
                         if process_filter != "all" and process_name not in filtered_processes:
                                 continue
                         output_line = colors["dark_white"] + str(date) + " " #append colored date
-                        output_line += str(device_name) + " " #append device name
+                        output_line += colors["blue"] + str(device_name) + " " #append device name
                         output_line += colors["cyan"] + str(process_name) + "[%s]" % (str(process_id)) #append process_name[process_id]
                         msg_colors = msgColorsForType(msg_type)
                         output_line += msg_colors[1] + " <" + msg_colors[0] + msg_type + msg_colors[1] + "> " #append msg type
