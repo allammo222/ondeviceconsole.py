@@ -41,10 +41,12 @@ def msgColorsForType(msg_type):
         return (colors['red'],colors['dark_red'])
     return (colors['white'],colors['dark_white'])
 
-def startSyslog(process_filter="all"):
+def startSyslog(process_filter="all",highlights=None):
     print("[*] Connecting...")
     if process_filter != "all":
         filtered_processes = [proc_name.strip() for proc_name in process_filter.split(',')]
+    if highlights != None:
+        highlights = [hl.strip() for hl in highlights.split(',')]
     if os.path.exists(sock_path):
         client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         client.connect(sock_path)
@@ -66,6 +68,9 @@ def startSyslog(process_filter="all"):
                         output_line += colors["cyan"] + str(process_name) + "[%s]" % (str(process_id)) #append process_name[process_id]
                         msg_colors = msgColorsForType(msg_type)
                         output_line += msg_colors[1] + " <" + msg_colors[0] + msg_type + msg_colors[1] + "> " #append msg type
+                        if highlights != None:
+                            for hl in highlights:
+                                msg = msg.replace(hl,colors['magenta'] + hl + colors['dark_white'])
                         output_line += colors['dark_white'] + msg + "\n" #append message
                         print(output_line)
             except KeyboardInterrupt, k:
@@ -79,5 +84,6 @@ def startSyslog(process_filter="all"):
 
 parser = optparse.OptionParser()
 parser.add_option('-p', '--process', dest="process", help="filter out this process name", default="all")
+parser.add_option('--highlight', dest="highlight", help="highlight certain classes", default=None)
 options, args = parser.parse_args()
-startSyslog(options.process)
+startSyslog(options.process,options.highlight)
