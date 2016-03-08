@@ -43,6 +43,8 @@ def msgColorsForType(msg_type):
 
 def startSyslog(process_filter="all"):
     print("[*] Connecting...")
+    if process_filter != "all":
+        filtered_processes = [proc_name.strip() for proc_name in process_filter.split(',')]
     if os.path.exists(sock_path):
         client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
         client.connect(sock_path)
@@ -60,7 +62,7 @@ def startSyslog(process_filter="all"):
                         device_name = groups[1]
                         process_name = groups[2]
                         if process_filter != "all":
-                            if process_name != process_filter:
+                            if process_name not in filtered_processes:
                                 continue
                         process_id = groups[3]
                         msg_type = groups[4]
