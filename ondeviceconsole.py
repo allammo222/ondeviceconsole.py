@@ -58,17 +58,11 @@ def startSyslog(process_filter="all"):
                 if result != None:
                     groups = result.groups()
                     if len(groups) == 6:
-                        date = groups[0]
-                        device_name = groups[1]
-                        process_name = groups[2]
+                        (date, device_name, process_name, process_id, msg_type, msg) = groups
                         if process_filter != "all":
                             if process_name not in filtered_processes:
                                 continue
-                        process_id = groups[3]
-                        msg_type = groups[4]
-                        msg = groups[5]
-                        output_line = ""
-                        output_line += colors["dark_white"] + str(date) + " " #append colored date
+                        output_line = colors["dark_white"] + str(date) + " " #append colored date
                         output_line += str(device_name) + " " #append device name
                         output_line += colors["cyan"] + str(process_name) + "[%s]" % (str(process_id)) #append process_name[process_id]
                         msg_colors = msgColorsForType(msg_type)
