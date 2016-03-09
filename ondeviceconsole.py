@@ -73,6 +73,10 @@ def startSyslog(process_filter="all",highlights=None):
                                 msg = msg.replace(hl,colors['magenta'] + hl + colors['dark_white'])
                         output_line += colors['dark_white'] + msg + "\n" #append message
                         print(output_line)
+                if highlights != None:
+                    for hl in highlights:
+                        line = line.replace(hl,colors['magenta'] + hl + colors['dark_white'])
+                print(line) #by printing lines that do not match the regex we support multiline messages
             except KeyboardInterrupt, k:
                 print(colors['reset'] + "\n[!] Shutting down.")
                 client.close()
@@ -83,7 +87,7 @@ def startSyslog(process_filter="all",highlights=None):
         print(colors['reset'] + "[*] Done")
 
 parser = optparse.OptionParser()
-parser.add_option('-p', '--process', dest="process", help="filter out this process name", default="all")
-parser.add_option('--highlight', dest="highlight", help="highlight certain classes", default=None)
+parser.add_option('-p', '--process', dest="process", help="filter out this process name. pass multiple process comma separated", default="all")
+parser.add_option('--highlight', dest="highlight", help="highlight certain words. pass multiple comma separated", default=None)
 options, args = parser.parse_args()
 startSyslog(options.process,options.highlight)
