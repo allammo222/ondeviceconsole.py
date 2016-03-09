@@ -83,8 +83,8 @@ def startSyslog(process_filter="all",highlights=None):
                 break
     else:
         print("[!] Could not connect to syslog.")
-        sys.exit()
         print(colors['reset'] + "[*] Done")
+        sys.exit()
 
 parser = optparse.OptionParser()
 parser.add_option('-p', '--process', dest="process", help="filter out this process name. pass multiple process comma separated", default="all")
