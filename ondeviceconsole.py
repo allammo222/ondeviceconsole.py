@@ -27,7 +27,7 @@ colors = {
     "dark_white":"\033[0;37m"
 }
 sock_path = "/var/run/lockdown/syslog.sock"
-line_regex = "(\w+\s+\d+\s+\d+:\d+:\d+)\s+(\S+|)\s+(\w+)\[(\d+)\]\s+\<(\w+)\>:\s(.*)"
+line_regex = "(\w+\s+\d+\s+\d+:\d+:\d+)\s+(\S+|)\s+([a-zA-Z\.]\w+)\[(\d+)\]\s+\<(\w+)\>:\s(.*)"
 
 default_colors = {
     'date_color': 'white',
@@ -100,8 +100,10 @@ def startSyslog(process_filter="all",highlights=None):
                         if highlights != None:
                             for hl in highlights:
                                 msg = msg.replace(hl,colorStringForColorConfig('highlight_color') + hl + colorStringForColorConfig('msg_color'))
-                        output_line += colorStringForColorConfig('msg_color') + msg + "\n" #append message
-                        print(output_line)
+                        output_line += colorStringForColorConfig('msg_color') + msg + "\n" + colors['reset'] #append message
+                        print(output_line.strip('\n'))
+                    else:
+                        print(colorStringForColorConfig('msg_color') + line.strip('\n')) + colors['reset']
             except KeyboardInterrupt, k:
                 print(colors['reset'] + "\n[!] Shutting down.")
                 client.close()
